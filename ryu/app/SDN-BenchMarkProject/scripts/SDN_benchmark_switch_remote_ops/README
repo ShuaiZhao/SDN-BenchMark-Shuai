@@ -1,0 +1,39 @@
+before you can use any scripts here, you need to make sure your control as ssh into any of your OVS switches
+
+to make things easier, make ssh keyless
+
+1. create a ssh key on controller: 
+	$ ssh-keygen -t rsa
+2. Then log in to your OVS. add just created public key from controller to each of your OVS
+	#!/bin/bash
+	# add_controller_public_key_to_auth.sh
+	public_key=''
+
+	cat >> ~/.ssh/authorized_keys << EOF
+	$public_key
+	EOF
+
+3. Try to ssh into each of your OVS now
+	ssh OVS-IP-Addresss
+
+
+
+4 scripts running logic:
+	a. Check OVS bridge status
+		# check_remote_ovs_status.sh
+	b. remote add OVS bridge "ofbpr" on each of the switches:
+		# remote_add_ovs_bridge.sh
+	c. After create ovs bridge, we get can the OVS bridge datapath id, also return a file "../../network-data2/ofp_switches_list.db"
+		result example:
+			s0 0000bacba8676944
+			s1 00008a6c99430847
+			s2 00007eb19c65614c
+		#get_switch_ofpbr_datapath_id.sh
+	d. Dump all the flows from all of the monitored OVS bridges:
+		# remote_dump_ovs_flows.sh
+  		Or 
+  		Delete all the flows from all of the switches:
+			# remote_delete_ovs_flows.sh
+	e. Delete all the 'ofpbr' OVS bridge
+		# remote_delete_ovs_bridge.sh
+	f. Then do check_remote_ovs_status.sh to see if all the flows and bridges are deleted.

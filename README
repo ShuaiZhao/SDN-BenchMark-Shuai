@@ -1,0 +1,17 @@
+before you can use any scripts here, you need to make sure your control as ssh into any of your OVS switches
+
+to make things easier, make ssh keyless
+
+1. create a ssh key on controller: 
+	$ ssh-keygen -t rsa
+2. Then log in to your OVS. add just created public key from controller to each of your OVS
+	#!/bin/bash
+	# add_controller_public_key_to_auth.sh
+	public_key='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA1ZJpcbXkW/CXmP/GKV6PxgrQAlOXpLXRHdPLDtR56SG1/l3BA4RcaupYIELCL++bib9l9UOw1G0GS4GjOeoAINY9/7qfPXJu0vubb6zBmJyMJmQn3ivcwBuYbrEuTVDTiEvBVH9C0t4evgupl8+TEYYwv9V8u3M0oXwqIGOrAPVbmK3+QDVmCbGc+YLLyv0IR9384HMTE9OXXJnC0Vaci5KZUqQIB3IK7y1QIJjRFyTxw10j+q0TyLqlrC/yVJ4Why8FoTPaWcE3pRPbmuuQvXMBSCUlAp2dZWyPn06gJAZGVzYSfxrOqEXcIKqnUzLdBxDwoORJgbmFVrybDwvt szb53@c2.ryu-controllers.ch-geni-net.instageni.umkc.edu'
+
+	cat >> ~/.ssh/authorized_keys << EOF
+	$public_key
+	EOF
+
+3. Try to ssh into each of your OVS now
+	ssh OVS-IP-Address
